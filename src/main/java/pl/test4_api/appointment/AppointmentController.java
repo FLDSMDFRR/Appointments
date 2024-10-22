@@ -34,10 +34,10 @@ public class AppointmentController {
                                    @RequestParam(value = "patientId", required = false) Integer patientId,
                                    @RequestParam(value = "dateFrom", required = false) String dateFrom,
                                    @RequestParam(value = "dateTo", required = false) String dateTo,
-                                   @RequestParam(value = "reason", required = false) Reason reason,
+//                                   @RequestParam(value = "reason", required = false) Reason reason,
                                    Model model) {
 
-        List<Appointment> appointments = appointmentService.filterAppointments(doctorId, patientId, dateFrom, dateTo, reason);
+        List<Appointment> appointments = appointmentService.filterAppointments(doctorId, patientId, dateFrom, dateTo);
 
         appointments = appointmentService.sortAppointments(appointments, sort, direction);
 
@@ -52,7 +52,7 @@ public class AppointmentController {
         model.addAttribute("dateTo", dateTo);
         model.addAttribute("sort", sort);
         model.addAttribute("order", direction);
-        model.addAttribute("reason", reason);
+//        model.addAttribute("reason", reason);
 
         return "appointment/list";
     }

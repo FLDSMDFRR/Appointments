@@ -19,22 +19,4 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-    @GetMapping
-    public String getList(Model model) {
-        model.addAttribute("doctors", doctorService.getAll());
-        return "doctor/list";
-    }
-
-    @GetMapping("/create")
-    public String getCreateForm() {
-        return "doctor/form";
-    }
-
-    @PostMapping("/create")
-    public String create(Doctor doctor, Model model) {
-        doctorService.create(doctor);
-        model.addAttribute("message", "Nauczyciel dodany pomyślnie!");
-        return "redirect:/doctors";
-    }
-
 }

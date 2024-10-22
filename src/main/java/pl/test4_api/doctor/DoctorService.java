@@ -16,12 +16,5 @@ public class DoctorService {
     public List<Doctor> getAll() {
         return doctorRepository.findAll();
     }
-    public Doctor getById(int id) {
-        return doctorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Teacher not found"));
-    }
 
-    public void create(Doctor doctor) {
-        doctorRepository.save(doctor);
-    }
 }

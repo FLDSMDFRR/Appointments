@@ -61,7 +61,7 @@ public class AppointmentService {
         return appointmentRepository.findAllByReasonsContaining(reason);
     }
 
-    public List<Appointment> filterAppointments(Integer doctorId, Integer patientId, String dateFrom, String dateTo, Reason reason) {
+    public List<Appointment> filterAppointments(Integer doctorId, Integer patientId, String dateFrom, String dateTo) {
         List<Appointment> appointments = appointmentRepository.findAll();
 
         if (doctorId != null) {
@@ -90,12 +90,6 @@ public class AppointmentService {
             }
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Niepoprawny format daty", e);
-        }
-
-        if (reason != null) {
-            appointments = appointments.stream()
-                    .filter(a -> a.getReasons() != null && a.getReasons().contains(reason))
-                    .collect(Collectors.toList());
         }
 
         return appointments;
