@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Wizyt</title>
+    <style>
+        /* Twoje istniejące style */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #444;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 90%;
+            margin: 50px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        td {
+            color: #555;
+        }
+
+        .create-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .create-button:hover {
+            background-color: #218838;
+        }
+
+        /* Styl dla przycisków sortujących */
+        .sort-button {
+            margin-left: 5px;
+            font-size: 0.8em;
+            text-decoration: none;
+            color: white;
+        }
+
+        .sort-button:hover {
+            text-decoration: underline;
+        }
+
+        /* Styl dla formularza wyszukiwania */
+        .search-form {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+</head>
+<body>
+
+<a href="/appointments/create" class="create-button">Utwórz Nową Wizytę</a>
+
+<h1>Lista Wizyt</h1>
+
+<div class="search-form">
+    <form action="/appointments" method="get">
+        <label for="doctorSelect">Wybierz lekarza:</label>
+        <select name="doctorId" id="doctorSelect">
+            <option value="" disabled selected>Wybierz lekarza</option>
+            <option th:each="doctor : ${doctors}" th:value="${doctor.id}"
+                    th:text="${doctor.firstName + ' ' + doctor.lastName}"></option>
+        </select>
+
+        <label for="patientSelect">Wybierz pacjenta:</label>
+        <select name="patientId" id="patientSelect">
+            <option value="" disabled selected>Wybierz pacjenta</option>
+            <option th:each="patient : ${patients}" th:value="${patient.id}"
+                    th:text="${patient.firstName + ' ' + patient.lastName}"></option>
+        </select>
+
+        <label for="reasonSelect">Wybierz przyczynę:</label>
+        <select name="reason" id="reasonSelect">
+            <option value="" disabled selected>Wybierz przyczynę</option>
+            <option th:each="reason : ${reasons}" th:value="${reason}"
+                    th:text="${reason}"></option>
+        </select>
+
+        <label for="dateFrom">Od daty:</label>
+        <input type="datetime-local" name="dateFrom" id="dateFrom" th:value="${dateFrom}">
+
+        <label for="dateTo">Do daty:</label>
+        <input type="datetime-local" name="dateTo" id="dateTo" th:value="${dateTo}">
+
+        <button type="submit" class="search-button">Szukaj</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>
+            Date
+            <a th:href="@{/appointments(sort='date', order='asc', doctorId=${doctorId}, patientId=${patientId}, dateFrom=${dateFrom}, dateTo=${dateTo})}" class="sort-button">sort ascending</a>
+            <a th:href="@{/appointments(sort='date', order='desc', doctorId=${doctorId}, patientId=${patientId}, dateFrom=${dateFrom}, dateTo=${dateTo})}" class="sort-button">sort descending</a>
+        </th>
+        <th>
+            Doctor
+            <a th:href="@{/appointments(sort='doctor', order='asc', doctorId=${doctorId}, patientId=${patientId}, dateFrom=${dateFrom}, dateTo=${dateTo})}" class="sort-button">sort (A-Z)</a>
+            <a th:href="@{/appointments(sort='doctor', order='desc', doctorId=${doctorId}, patientId=${patientId}, dateFrom=${dateFrom}, dateTo=${dateTo})}" class="sort-button">sort (Z-A)</a>
+        </th>
+        <th>
+            Patient
+            <a th:href="@{/appointments(sort='patient', order='asc', doctorId=${doctorId}, patientId=${patientId}, dateFrom=${dateFrom}, dateTo=${dateTo})}" class="sort-button">sort (A-Z)</a>
+            <a th:href="@{/appointments(sort='patient', order='desc', doctorId=${doctorId}, patientId=${patientId}, dateFrom=${dateFrom}, dateTo=${dateTo})}" class="sort-button">sort (Z-A)</a>
+        </th>
+        <th>
+            Duration (min)
+            <a th:href="@{/appointments(sort='duration', order='asc', doctorId=${doctorId}, patientId=${patientId}, dateFrom=${dateFrom}, dateTo=${dateTo})}" class="sort-button">sort ascending</a>
+            <a th:href="@{/appointments(sort='duration', order='desc', doctorId=${doctorId}, patientId=${patientId}, dateFrom=${dateFrom}, dateTo=${dateTo})}" class="sort-button">sort descending</a>
+        </th>
+        <th>Reason</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="appointment : ${appointments}">
+        <td th:text="${appointment.date}"></td>
+        <td th:text="${appointment.doctor.lastName + ' ' + appointment.doctor.firstName}"></td>
+        <td th:text="${appointment.patient.lastName + ' ' + appointment.patient.firstName}"></td>
+        <td th:text="${appointment.duration}"></td>
+        <td th:text="${appointment.reasons}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+
